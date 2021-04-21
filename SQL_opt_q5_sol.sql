@@ -20,8 +20,16 @@ INNER JOIN (
     FROM Transcript AS t
     INNER JOIN Course As c
     ON t.crsCode = c.crsCode
-    WHERE deptId = @v6) AS a
+    WHERE deptId = @v6
+    AND studID NOT IN (
+		SELECT t.studId,
+		c.deptId 
+    FROM Transcript AS t
+    INNER JOIN Course As c
+    ON t.crsCode = c.crsCode
+    WHERE deptId = @v7)) AS a
 ON s.id = a.studId
+
 
 -- 1.The bottlenecks where mainly in the first SELECT * statement which I reduced to just selecting the name column,
 -- the main bulk of the time delay was in the multiple and nested subquarys
